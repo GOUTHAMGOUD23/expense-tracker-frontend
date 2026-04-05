@@ -7,7 +7,7 @@ export const authService = {
 
   // OAuth2 Google — redirect to backend
   googleLogin: () => {
-  window.location.href = "https://expense-tracker-backend-j36l.onrender.com/oauth2/authorization/google"
+    window.location.href = '/oauth2/authorization/google'
   },
 
   // Called by OAuthRedirect page after token arrives in URL
