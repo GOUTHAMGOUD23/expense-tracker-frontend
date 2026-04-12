@@ -8,18 +8,18 @@ export default defineConfig({
     proxy: {
       // API calls → backend
       '/api': {
-        target: 'https://expense-tracker-backend-j36l.onrender.com',
+        target: 'http://localhost:8080',
         changeOrigin: true,
       },
       // Only proxy the OAuth2 LOGIN INITIATION (sends user to Google)
       // Do NOT proxy /oauth2/redirect — that is a React frontend route
       '/oauth2/authorization': {
-        target: 'https://expense-tracker-backend-j36l.onrender.com',
+        target: 'http://localhost:8080',
         changeOrigin: true,
       },
       // Spring Security OAuth2 callback from Google → backend
       '/login/oauth2': {
-        target: 'https://expense-tracker-backend-j36l.onrender.com',
+        target: 'http://localhost:8080',
         changeOrigin: true,
       },
     }
