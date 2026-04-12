@@ -1,16 +1,18 @@
-import api from './api'
+import api, { BACKEND_URL } from './api'
 
 export const authService = {
   register: (data) => api.post('/auth/register', data),
   login:    (data) => api.post('/auth/login', data),
   me:       ()     => api.get('/auth/me'),
 
-  // OAuth2 Google — redirect to backend
+  // OAuth2 Google — must redirect to the BACKEND, not the frontend
+  // In production: BACKEND_URL = https://your-backend.onrender.com
+  // In local dev:  BACKEND_URL = '' and Vite proxy handles /oauth2/authorization
   googleLogin: () => {
-    window.location.href = '/oauth2/authorization/google'
+    const oauthUrl = `${BACKEND_URL}/oauth2/authorization/google`
+    window.location.href = oauthUrl
   },
 
-  // Called by OAuthRedirect page after token arrives in URL
   saveToken: (token) => {
     localStorage.setItem('token', token)
   },
@@ -24,12 +26,12 @@ export const authService = {
 }
 
 export const expenseService = {
-  getAll:  (params) => api.get('/expenses', { params }),
-  getById: (id)     => api.get(`/expenses/${id}`),
-  create:  (data)   => api.post('/expenses', data),
-  update:  (id, data) => api.put(`/expenses/${id}`, data),
-  remove:  (id)     => api.delete(`/expenses/${id}`),
-  recent:  (limit=5) => api.get('/expenses/recent', { params: { limit } }),
+  getAll:    (params)     => api.get('/expenses', { params }),
+  getById:   (id)         => api.get(`/expenses/${id}`),
+  create:    (data)       => api.post('/expenses', data),
+  update:    (id, data)   => api.put(`/expenses/${id}`, data),
+  remove:    (id)         => api.delete(`/expenses/${id}`),
+  recent:    (limit = 5)  => api.get('/expenses/recent', { params: { limit } }),
 }
 
 export const reportService = {
@@ -39,8 +41,8 @@ export const reportService = {
 }
 
 export const insightService = {
-  monthly:   () => api.get('/insights/monthly'),
-  ask:       (question) => api.post('/insights/ask', { question }),
-  anomalies: () => api.get('/insights/anomalies'),
-  budget:    () => api.get('/insights/budget'),
+  monthly:   ()           => api.get('/insights/monthly'),
+  ask:       (question)   => api.post('/insights/ask', { question }),
+  anomalies: ()           => api.get('/insights/anomalies'),
+  budget:    ()           => api.get('/insights/budget'),
 }
