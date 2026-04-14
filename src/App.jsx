@@ -1,7 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function Test() {
-  return <h1 style={{ color: "black" }}>ROUTE WORKING ✅</h1>;
+  return (
+    <h1 style={{ color: "black", textAlign: "center", marginTop: "100px" }}>
+      ROUTE WORKING ✅
+    </h1>
+  );
 }
 
 function App() {
