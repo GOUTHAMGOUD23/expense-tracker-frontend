@@ -32,7 +32,7 @@ function AppRoutes() {
     <Routes>
       <Route path="/login"  element={<PublicRoute><Login /></PublicRoute>} />
       <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
-      <Route path="/oauth2/redirect" element={<OAuthRedirect />} />
+     <Route path="/oauth2/redirect" element={<OAuthRedirect />} />
       <Route path="/"       element={<PrivateRoute><Home /></PrivateRoute>} />
       <Route path="/insights" element={<PrivateRoute><Insights /></PrivateRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 
 export default function OAuthRedirect() {
+  console.log("OAuthRedirect loaded");
   const [params] = useSearchParams()
   const { loginWithOAuth } = useAuth()
   const navigate = useNavigate()
