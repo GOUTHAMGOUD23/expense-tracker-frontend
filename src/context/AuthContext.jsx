@@ -9,16 +9,13 @@ export function AuthProvider({ children }) {
 
   const fetchMe = useCallback(async () => {
     const token = authService.getToken()
-    if (!token) {
-      setLoading(false)
-      return null
-    }
+    if (!token) { setLoading(false); return null }
     try {
       const { data } = await authService.me()
       setUser(data)
       return data
     } catch (err) {
-      console.error('fetchMe failed:', err?.response?.status, err?.message)
+      console.error('fetchMe failed:', err?.response?.status)
       authService.logout()
       setUser(null)
       return null
@@ -27,9 +24,7 @@ export function AuthProvider({ children }) {
     }
   }, [])
 
-  useEffect(() => {
-    fetchMe()
-  }, [fetchMe])
+  useEffect(() => { fetchMe() }, [fetchMe])
 
   const login = async (credentials) => {
     const { data } = await authService.login(credentials)
@@ -45,15 +40,10 @@ export function AuthProvider({ children }) {
     return data
   }
 
-  /**
-   * Called by OAuthRedirect after Google login.
-   * Saves token then re-runs fetchMe so user state is fully set.
-   * Returns the user data so the caller can decide what to do.
-   */
   const loginWithOAuth = async (token) => {
-    setLoading(true)               // show spinner, block PrivateRoute redirect
+    setLoading(true)
     authService.saveToken(token)
-    return await fetchMe()         // sets user + loading=false, returns user|null
+    return await fetchMe()
   }
 
   const logout = () => {
