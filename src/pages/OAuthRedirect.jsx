@@ -1,62 +1,51 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 
 export default function OAuthRedirect() {
-  const [params]           = useSearchParams()
+  const [params] = useSearchParams()
   const { loginWithOAuth } = useAuth()
-  const navigate           = useNavigate()
-  const handled            = useRef(false)
-  const [status, setStatus] = useState('Signing you in with Google…')
+  const navigate = useNavigate()
+  const handled = useRef(false)
 
   useEffect(() => {
-    // React StrictMode mounts twice — guard against double execution
     if (handled.current) return
     handled.current = true
 
     const token = params.get('token')
     const error = params.get('error')
 
+    console.log("OAuth page loaded")
+    console.log("Token:", token)
+
     if (error) {
-      toast.error('Google login failed. Please try again.')
-      navigate('/login', { replace: true })
-      return
+      toast.error('Google login failed')
+      return navigate('/login', { replace: true })
     }
 
     if (!token) {
-      toast.error('No token received. Please try again.')
-      navigate('/login', { replace: true })
-      return
+      toast.error('No token received')
+      return navigate('/login', { replace: true })
     }
 
-    setStatus('Loading your account…')
-
     loginWithOAuth(token)
-      .then((userData) => {
-        if (userData) {
-          const firstName = userData.name?.split(' ')[0] || 'back'
-          toast.success(`Welcome, ${firstName}!`)
-          navigate('/', { replace: true })
-        } else {
-          // fetchMe failed — token may be invalid
-          toast.error('Could not load your account. Please sign in again.')
-          navigate('/login', { replace: true })
-        }
+      .then((user) => {
+        console.log("User:", user)
+        toast.success('Login successful')
+        navigate('/', { replace: true })
       })
       .catch((err) => {
-        console.error('OAuthRedirect error:', err)
-        toast.error('Something went wrong. Please try again.')
+        console.error(err)
+        toast.error('Login failed')
         navigate('/login', { replace: true })
       })
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  }, [])
 
   return (
-    <div className="loader-full">
-      <div className="spinner spinner-lg" />
-      <p style={{ color: 'var(--text-muted)', fontSize: 13, marginTop: 4 }}>
-        {status}
-      </p>
+    <div style={{ textAlign: 'center', marginTop: '100px' }}>
+      <h3>Signing you in...</h3>
     </div>
   )
 }
